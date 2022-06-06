@@ -5,9 +5,15 @@ import 'package:flutter_clean_architecture/domain/User.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryImpl extends Repository {
+  final http.Client httpClient;
+  static const usersUrl = "https://reqres.in/api/users";
+
+  RepositoryImpl({required http.Client client}) : httpClient = client;
+
   @override
   Future<List<User>> loadUsers() async {
-    final response = await http.get(Uri.parse("https://reqres.in/api/users"));
+    final response =
+        await httpClient.get(Uri.parse(usersUrl));
     if (response.statusCode == 200) {
       return parseUsers(response.body);
     } else {
